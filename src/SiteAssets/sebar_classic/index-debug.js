@@ -80,40 +80,6 @@ class DepartmentsWP {
     }
   }
 
-  // createTask(data = {}) {
-  //   try {
-  //     // const query = this.getQuery('Team(exam)', 'fields.d.results[0].Choices.results');
-
-  //     //   const query = this.getQuery('Team(exam)', 'items');
-  //     //   const requestDigest = await this.getRequestDigest(url);
-  //     //   console.log('requestDigest', requestDigest.d.GetContextWebInformation.FormDigestValue);
-  //     //   const listItemType = await this.getListItemType(url, "Team(exam)");
-  //     // // console.log('listItemType', listItemType);
-  //     const newData = {
-  //       Task: "newTask",
-  //       Description: "",
-  //       Performed: false,
-  //       Importence: choices[0], //ввесь перечень чейсов можно получить, если вытянуть филды списка и посмотреть в свойстве Choise этого филда
-  //       LeaderId: 2 // lookup поле приставка Id + записывает айдишник айтема списка, куда смотрит это поле. В нашем случае список контактов
-  //     }; // формирует объект с изминениями
-
-  //     Object.assign(newData, ...data)
-
-  //     const createdData = await this.createData(
-
-  //       this.baseURL + query, newData
-
-  //       // url, 
-  //       // fields.d.results[0].Choices.results
-  //     );
-  //     console.log(createdData);
-  //   } catch (err) {
-  //     console.log('err', err)
-  //   }
-
-
-  // }
-
   async createData(url = "", newData = {}) {
     const query = this.getQuery('Team(exam)', 'items');
     const listItemType = await this.getListItemType(url, "Team(exam)");
@@ -128,42 +94,17 @@ class DepartmentsWP {
     return this.postAJAX(query, objData)
   }
 
-  async createTask(newUser) {
-    const query = this.baseURL + this.getQuery('Tasks(exam)', `items`);
-    const listItemType = await this.getListItemType('Tasks(exam)');
-    const objType = {
-      __metadata: {
-        type: listItemType.d.ListItemEntityTypeFullName,
-      },
-    };
-
-    const objData = JSON.stringify(Object.assign(objType, newUser));
-
-    this.postAJAX(query, objData)
-    return $.ajax({
-      url: query,
-      type: 'POST',
-      data: objData,
-      headers: {
-        Accept: 'application/json;odata=verbose',
-        'Content-Type': 'application/json;odata=verbose',
-        'X-RequestDigest': requestDigest.d.GetContextWebInformation.FormDigestValue,
-        'X-HTTP-Method': 'POST',
-      },
-    });
-  }
-
   getListItemType(listTitle) {
     const query = this.getQuery(listTitle, 'ListItemEntityTypeFullName');
     return this.getItems(this.baseURL + query);
   }
 
-  // async updateData(url) {
-  //   const query = this.getQuery('Team(exam)', 'items(2)');
-  //   const requestDigest = await this.requestDigest(url);
-  //   console.log('requestDigest', requestDigest.d.GetContextWebInformation.FormDigestValue)
-  //   const listItemType = await this.getListItemType(url, "Team(exam)");
-  // }
+  async updateData(url) {
+    const query = this.getQuery('Team(exam)', 'items(2)');
+    const requestDigest = await this.requestDigest(url);
+    console.log('requestDigest', requestDigest.d.GetContextWebInformation.FormDigestValue)
+    const listItemType = await this.getListItemType(url, "Team(exam)");
+  }
 
   getAJAX(url) {
     return $.ajax({
