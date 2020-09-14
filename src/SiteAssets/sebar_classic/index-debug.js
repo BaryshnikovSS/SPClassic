@@ -114,25 +114,19 @@ class DepartmentsWP {
 
   // }
 
-  // async createData(url = "", newData = {}) {
+  async createData(url = "", newData = {}) {
+    const query = this.getQuery('Team(exam)', 'items');
+    const listItemType = await this.getListItemType(url, "Team(exam)");
 
+    const objType = {
+      __metadata: {
+        type: listItemType.d.ListItemEntityTypeFullName,
+      }
+    };
 
-
-  // const query = this.getQuery('Team(exam)', 'items');
-  // const requestDigest = await this.getRequestDigest(url);
-  // console.log('requestDigest', requestDigest.d.GetContextWebInformation.FormDigestValue);
-  // const listItemType = await this.getListItemType(url, "Team(exam)");
-  // // console.log('listItemType', listItemType);
-
-  //   const objType = {
-  //     __metadata: {
-  //       type: listItemType.d.ListItemEntityTypeFullName,
-  //     }
-  //   };
-
-  //   const objData = JSON.stringify(Object.assign(objType, newData));
-  //   return this.postAJAX(query, objData)
-  // }
+    const objData = JSON.stringify(Object.assign(objType, newData));
+    return this.postAJAX(query, objData)
+  }
 
   async createTask(newUser) {
     const query = this.baseURL + this.getQuery('Tasks(exam)', `items`);
@@ -142,31 +136,22 @@ class DepartmentsWP {
         type: listItemType.d.ListItemEntityTypeFullName,
       },
     };
+
     const objData = JSON.stringify(Object.assign(objType, newUser));
 
     this.postAJAX(query, objData)
-    // return $.ajax({
-    //   url: query,
-    //   type: 'POST',
-    //   data: objData,
-    //   headers: {
-    //     Accept: 'application/json;odata=verbose',
-    //     'Content-Type': 'application/json;odata=verbose',
-    //     'X-RequestDigest':
-    //       requestDigest.d.GetContextWebInformation.FormDigestValue,
-    //     'X-HTTP-Method': 'POST',
-    //   },
-    // });
+    return $.ajax({
+      url: query,
+      type: 'POST',
+      data: objData,
+      headers: {
+        Accept: 'application/json;odata=verbose',
+        'Content-Type': 'application/json;odata=verbose',
+        'X-RequestDigest': requestDigest.d.GetContextWebInformation.FormDigestValue,
+        'X-HTTP-Method': 'POST',
+      },
+    });
   }
-
-  // getListItemType(url, listTitle) {
-  //   const query =
-  //     url +
-  //     "_api/Web/Lists/getbytitle('" +
-  //     listTitle +
-  //     "')/ListItemEntityTypeFullName";
-  //   return this.getItems(query);
-  // }
 
   getListItemType(listTitle) {
     const query = this.getQuery(listTitle, 'ListItemEntityTypeFullName');
